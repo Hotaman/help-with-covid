@@ -6,8 +6,7 @@ const app = express(); // define our app using express
 const bodyParser = require("body-parser");
 const neighborhood = require("./helpers/neighborhood");
 const task = require("./helpers/onfleet/task");
-const Onfleet = require("@onfleet/node-onfleet");
-const onfleet = new Onfleet(process.env.ONFLEET_KEY);
+const team = require("./helpers/onfleet/team");
 const firebase = require("./helpers/firebase");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -76,28 +75,22 @@ app.post("/team", async function(req, res) {
         state: address.state,
         zipcode: address.postalCode
     });
-    console.log(neighborhoodData);
-    const name = neighborhoodData.short_name.replace("/", "-");
-    const neighborhoodID = neighborhoodData.id;
-    onfleet.teams
-        .create({
-            name: neighborhoodID
+
+    team.createTeam(neighborhoodData)
+        .then(results => {
+            firebase.writeNewTeam(
+                results.name,
+                results.onFleetID,
+                results.neighborhoodID
+            );
+            res.status(200).json(results);
         })
-        .catch(function(response) {
-            res.status(409).send("Team already exists");
-        })
-        .then(function(response) {
-            const id = response.id;
-            firebase.writeNewTeam(name, id, neighborhoodID);
-            res.status(200).json({
-                onFleetID: id,
-                name: name,
-                neighborhoodID: neighborhoodID
-            });
+        .catch(error => {
+            res.status(509).send(
+                "Team already exists or other error\n" + error
+            );
         });
 });
-
-app.get("/team", async function(req, res) {});
 
 // more routes for our API will happen here
 exports.widgets = functions.https.onRequest(app);

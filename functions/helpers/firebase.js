@@ -13,7 +13,7 @@ const writeNewTeam = async (name, onfleetID, neighborhoodID) => {
         .set({
             neighborhoodID: neighborhoodID,
             name: name,
-            OnFleetID: onfleetID
+            onfleetID: onfleetID
         })
         .catch(function(error) {
             console.error("Error adding document: ", error);

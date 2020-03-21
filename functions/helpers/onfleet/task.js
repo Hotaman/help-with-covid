@@ -5,7 +5,7 @@ const createTask = async (address, person, notes) => {
     console.log(address);
     console.log(person);
 
-    return await onfleet.tasks.create({
+    return onfleet.tasks.create({
         destination: { address: address },
         recipients: [person],
         notes: notes,
@@ -14,15 +14,15 @@ const createTask = async (address, person, notes) => {
 };
 
 const deleteTask = async id => {
-    return await onfleet.tasks.deleteOne(id);
+    return onfleet.tasks.deleteOne(id);
 };
 
 const getTask = async id => {
-    return await onfleet.tasks.get(id);
+    return onfleet.tasks.get(id);
 };
 
 const updateTask = async (id, body) => {
-    return await onfleet.tasks.update(id, body);
+    return onfleet.tasks.update(id, body);
 };
 
 module.exports = {
