@@ -92,5 +92,14 @@ app.post("/team", async function(req, res) {
         });
 });
 
+app.get("/team/:id", async function(req, res) {
+    const team = await firebase.getTeam(req.params.id);
+    if (team.exists) {
+        res.status(200).json(team.data());
+    } else {
+        res.status(400);
+    }
+});
+
 // more routes for our API will happen here
 exports.widgets = functions.https.onRequest(app);

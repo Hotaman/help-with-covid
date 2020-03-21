@@ -20,6 +20,17 @@ const writeNewTeam = async (name, onfleetID, neighborhoodID) => {
         });
 };
 
+const getTeam = async id => {
+    return db
+        .collection("teams")
+        .doc(id)
+        .get()
+        .then(function(doc) {
+            return doc;
+        });
+};
+
 module.exports = {
-    writeNewTeam
+    writeNewTeam,
+    getTeam
 };
