@@ -94,10 +94,10 @@ app.post("/team", async function(req, res) {
 
 app.get("/team/:id", async function(req, res) {
     const team = await firebase.getTeam(req.params.id);
-    if (team.exists) {
+    if (team.data()) {
         res.status(200).json(team.data());
     } else {
-        res.status(400);
+        res.status(400).send("Team doesn't exist");
     }
 });
 
