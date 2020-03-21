@@ -8,7 +8,7 @@ const createTeam = async neighborhoodData => {
         .create({
             name: neighborhoodID
         })
-        .then(function (response) {
+        .then(function(response) {
             const id = response.id;
             const results = {
                 onFleetID: id,

@@ -40,20 +40,26 @@ app.get("/task/:id", async function(req, res) {
 
 app.post("/task", async function(req, res) {
     const address = req.body.address;
-    const neighborhoodName = await neighborhood.getNeighborhood({
+    const neighborhoodData = await neighborhood.getNeighborhood({
         streetAddress: address.number + " " + address.street,
         unit: address.apartment,
         city: address.city,
         state: address.state,
         zipcode: address.postalCode
     });
-    console.log(neighborhoodName);
+    console.log(neighborhoodData);
+    const team = await firebase.getTeam(neighborhoodData.id.toString());
+    if (!team.data()) {
+        res.status(400).send("Neighborhood not supported");
+        return;
+    }
     const results = await task.createTask(
         req.body.address,
         req.body.person,
-        req.body.notes
+        req.body.notes,
+        team.data().onfleetID
     );
-    res.json(results);
+    res.status(200).json(results);
 });
 
 app.patch("/task/:id", async function(req, res) {
