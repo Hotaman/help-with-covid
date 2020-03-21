@@ -2,9 +2,9 @@ const firebase = require("firebase");
 // Required for side-effects
 require("firebase/firestore");
 firebase.initializeApp({
-    apiKey: "AIzaSyB1MuZ5caX7Q8to5bhytlOz2-iF-frC_1c",
-    authDomain: "http://neighbor-army.firebaseapp.com/",
-    projectId: "neighbor-army"
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.FIREBASE_PROJECT_ID
 });
 var db = firebase.firestore();
 const writeNewTeam = async (name, onfleetID, neighborhoodID) => {
